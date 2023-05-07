@@ -56,6 +56,22 @@ namespace Catalog.API.Controllers
             return Ok(products);
         }
 
+        [Route("[action]/{productName}", Name = "GetProductByName")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductByName(string productName)
+        {
+            if (productName is null)
+            {
+                _logger.LogError($"Product Name is not valid, please check and try again.");
+                return BadRequest();
+            }
+
+            var products = await _repository.GetProductsByName(productName);
+            return Ok(products);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
