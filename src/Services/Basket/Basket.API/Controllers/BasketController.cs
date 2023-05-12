@@ -33,11 +33,11 @@ namespace Basket.API.Controllers
         {
             foreach(var item in basket.Items)
             {
-                var coupon = await _discountGrpcService.GetDiscount(item.ProductId);
+                var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
                 item.Price -= coupon.Amount;
             }
-
-            return Ok(_repository.UpdateBasket(basket));    
+            var response = await _repository.UpdateBasket(basket);
+            return Ok(response);    
         }
 
         [HttpDelete("{userName}", Name = "DeleteBasket")]
